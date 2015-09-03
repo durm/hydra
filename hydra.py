@@ -44,6 +44,7 @@ def save_items_status(service):
          else:
              if item in ENABLED:
                  disable(config, item)
+    restart(config)
     return redirect(url_for("items_list", service=service))
      
 if __name__ == "__main__":
