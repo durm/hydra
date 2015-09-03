@@ -1,0 +1,24 @@
+{% extends "root.html" %}
+
+{% block body %}
+<div>
+    <h3>Создать конфигурацию</h3>
+    <p>
+        <a href="{{ url_for('items_list', service=service) }}">К списку конфигураций</a>
+    </p>
+    <form action="{{ url_for('item_create_save', service=service) }}" method="post">
+        <ul>
+            <li>
+                <label>Название</label> <input type="text" name="item" required="required"/> 
+            </li>
+            <br/>
+            {% for param in config.get("PARAMS") %}
+                <li>
+                    <label>{{ param }}</label> <input type="text" name="{{ param }}"/> 
+                </li>
+            {% endfor %} 
+        </ul>
+        <input type="submit" value="Сохранить"/>
+    </form>
+</div>
+{% endblock %}

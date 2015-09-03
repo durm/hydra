@@ -2,20 +2,23 @@
 
 {% block body %}
 <div>
-<h3>Активность сервисов</h3>
-<form action="{{ url_for('save_items_status', service=service) }}" method="post">
-<ul>
-     {% for item in items %}
-          <li>
-          
-          
-               <label {% if item.1 %}title="{{ item.0 }} активен"{% else %}title="{{ item.0 }} неактивен"{% endif %}>
-                    <input type="checkbox" name="item" value="{{ item.0 }}" {% if item.1 %}checked="checked"{% endif %}/> {{ item.0 }}
-               </label>
-          </li>
-     {% endfor %}
-</ul>
-<input type="submit" value="Сохранить"/>
-</form>
+    <h3>Активность сервисов</h3>
+    <p>
+        <a href="{{ url_for('item_create', service=service) }}">Создать конфигурацию</a>
+    </p>
+    <form action="{{ url_for('save_items_status', service=service) }}" method="post">
+        <ul>
+            {% for item in items %}
+                <li>
+                    <label {% if item.1 %}title="{{ item.0 }} активен"{% else %}title="{{ item.0 }} неактивен"{% endif %}>
+                            <input type="checkbox" name="item" value="{{ item.0 }}" {% if item.1 %}checked="checked"{% endif %}/> 
+                            {{ item.0 }}
+                            <a href="{{ url_for('item_update', service=service, item=item.0) }}">Редактировать</a>
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        <input type="submit" value="Сохранить"/>
+    </form>
 </div>
 {% endblock %}

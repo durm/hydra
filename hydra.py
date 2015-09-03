@@ -10,7 +10,9 @@ SERVICES = {
     "nginx": {
         "ENABLED": "/etc/nginx/sites-enabled",
         "AVAILABLE": "/etc/nginx/sites-available",
-        "RESTART": "service nginx reload"
+        "RESTART": "service nginx reload",
+        "TPL":"nginx_tpl.conf",
+        "PARAMS": ["server_name", "root", "proxy_pass"]
     }
 }
 
@@ -21,12 +23,25 @@ def get_items_list(config):
 
 def enable(config, item):
     os.symlink(os.path.join(config["AVAILABLE"], item), os.path.join(config["ENABLED"], item))
+    restart(config)
 
 def disable(config, item):
     os.unlink(os.path.join(config["ENABLED"], item))
+    restart(config)
 
 def restart(config):
     os.system(config["RESTART"])
+
+def is_active(config, item):
+    return item in os.listdir(config["ENABLED"])
+
+def store(config, name, content):
+    with open(os.path.join(config["AVAILABLE"], name), "w") as item:
+        item.write(content)
+        
+def get_content(config, name):
+    with open(os.path.join(config["AVAILABLE"], name)) as item:
+        return item.read()
 
 @application.route("/", defaults={"service": "nginx"})
 @application.route("/<service>/")
@@ -46,9 +61,46 @@ def save_items_status(service):
          else:
              if item in ENABLED:
                  disable(config, item)
-    restart(config)
     return redirect(url_for("items_list", service=service))
-     
+
+@application.route("/<service>/create/")
+def item_create(service):
+    return render_template("item_create.html", service=service, config=SERVICES[service])
+
+@application.route("/<service>/create/save/", methods=["post"])
+def item_create_save(service):
+    
+    config = SERVICES[service]
+    content = render_template(config["TPL"], **request.form.to_dict())
+    
+    item = request.form.get("item", "")
+    active = request.form.get("active", "0") == 1
+    
+    store(config, item, content)
+    
+    return redirect(url_for("items_list", service=service))
+
+
+@application.route("/<service>/update/<item>/")
+def item_update(service, item):
+    config = SERVICES[service]
+    active = is_active(config, item)
+    content = get_content(config, item)
+    return render_template("item_update.html", service=service, item=item, content=content)
+
+@application.route("/<service>/update/save/", methods=["post"])
+def item_update_save(service):
+    
+    config = SERVICES[service]
+    
+    item = request.form.get("item")
+    content = request.form.get("content")
+    active = request.form.get("active", "0") == 1
+    
+    store(config, item, content)
+    
+    return redirect(url_for("items_list", service=service))
+
 if __name__ == "__main__":
     application.run()
     
