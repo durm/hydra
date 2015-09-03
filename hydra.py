@@ -7,8 +7,8 @@ application = Flask(__name__)
 
 SERVICES = {
     "nginx": {
-        "ENABLED": "/etc/nginx/sites-available",
-        "AVAILABLE": "/etc/nginx/sites-enabled",
+        "ENABLED": "/etc/nginx/sites-enabled",
+        "AVAILABLE": "/etc/nginx/sites-available",
         "RESTART": "service nginx restart"
     }
 }
@@ -22,7 +22,10 @@ def enable(config, item):
     os.symlink(os.path.join(config["AVAILABLE"], item), os.path.join(config["ENABLED"], item))
 
 def disable(config, item):
-    os.unlink(os.path.join(application.config["ENABLED"], item))
+    os.unlink(os.path.join(config["ENABLED"], item))
+
+def restart(config):
+    os.system(config["RESTART"])
 
 @application.route("/<service>/")
 def items_list(service):
