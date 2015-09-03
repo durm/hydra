@@ -1,7 +1,9 @@
+{% extends "root.html" %}
+
+{% block body %}
 <div>
 <h3>Активность виртуальных хостов</h3>
 <form action="{{ url_for('save_vhosts_status') }}" method="post">
-<input type="submit" value="Сохранить"/>
 <ul>
      {% for vhost in vhosts %}
           <li>
@@ -11,5 +13,7 @@
           </li>
      {% endfor %}
 </ul>
+<input type="submit" value="Сохранить"/>
 </form>
 </div>
+{% endblock %}

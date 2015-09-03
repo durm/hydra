@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, url_for, redirect
 import os
 
 application = Flask(__name__)
-application.debug = True
 
 SITES_AVAILABLE = "/etc/nginx/sites-available"
 SITES_ENABLED = "/etc/nginx/sites-enabled"
@@ -27,7 +26,7 @@ def vhosts():
 
 @application.route("/hosts/save/", methods=["post"])
 def save_vhosts_status():
-     active_vhosts = request.args.getlist("vhost")
+     active_vhosts = request.form.getlist("vhost")
      sites_enabled = os.listdir(SITES_ENABLED)
      for f in os.listdir(SITES_AVAILABLE):
           if f in active_vhosts:
