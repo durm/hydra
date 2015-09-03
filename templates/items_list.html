@@ -1,0 +1,19 @@
+{% extends "root.html" %}
+
+{% block body %}
+<div>
+<h3>Активность сервисов</h3>
+<form action="{{ url_for('save_items_status') }}" method="post">
+<ul>
+     {% for item in items %}
+          <li>
+               <label {% if item.1 %}title="{{ item.0 }} активен"{% else %}title="{{ item.0 }} неактивен"{% endif %}>
+                    <input type="checkbox" name="item" value="{{ item.0 }}" {% if item.1 %}checked="checked"{% endif %}/> {{ item.0 }}
+               </label>
+          </li>
+     {% endfor %}
+</ul>
+<input type="submit" value="Сохранить"/>
+</form>
+</div>
+{% endblock %}
