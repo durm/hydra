@@ -5,6 +5,7 @@ import os
 
 application = Flask(__name__)
 application.debug = True
+
 SERVICES = {
     "nginx": {
         "ENABLED": "/etc/nginx/sites-enabled",
@@ -27,6 +28,7 @@ def disable(config, item):
 def restart(config):
     os.system(config["RESTART"])
 
+@application.route("/", defaults={"service": "nginx"})
 @application.route("/<service>/")
 def items_list(service):
     return render_template("items_list.html", items=get_items_list(SERVICES[service]), service=service)
