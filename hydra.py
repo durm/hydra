@@ -9,7 +9,7 @@ SERVICES = {
     "nginx": {
         "ENABLED": "/etc/nginx/sites-enabled",
         "AVAILABLE": "/etc/nginx/sites-available",
-        "RESTART": "service nginx restart"
+        "RESTART": "service nginx reload"
     }
 }
 
