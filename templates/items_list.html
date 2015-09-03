@@ -3,7 +3,7 @@
 {% block body %}
 <div>
 <h3>Активность сервисов</h3>
-<form action="{{ url_for('save_items_status') }}" method="post">
+<form action="{{ url_for('save_items_status', service=service) }}" method="post">
 <ul>
      {% for item in items %}
           <li>
