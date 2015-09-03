@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, url_for, redirect
 import os
 
 application = Flask(__name__)
-
+application.debug = True
 SERVICES = {
     "nginx": {
         "ENABLED": "/etc/nginx/sites-enabled",
@@ -29,12 +29,12 @@ def restart(config):
 
 @application.route("/<service>/")
 def items_list(service):
-    return render_template("items_list.html", vhosts=get_items_list(SERVICES[service]), service=service)
+    return render_template("items_list.html", items=get_items_list(SERVICES[service]), service=service)
 
 @application.route("/<service>/save/", methods=["post"])
 def save_items_status(service):
     config = SERVICES[service]
-    ACTIVE = request.form.getlist("items")
+    ACTIVE = request.form.getlist("item")
     ENABLED = os.listdir(config["ENABLED"])
     AVAILABLE = os.listdir(config["AVAILABLE"])
     for item in AVAILABLE:
