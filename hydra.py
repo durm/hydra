@@ -52,7 +52,7 @@ def get_content(config, name):
 
 @application.route("/")
 def service_list():
-    return render_template("services.html", services=SERVICES.keys())
+    return render_template("service_list.html", services=SERVICES.keys())
 
 @application.route("/<service>/")
 def items_list(service):
