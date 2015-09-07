@@ -13,6 +13,13 @@ SERVICES = {
         "RESTART": "service nginx reload",
         "TPL":"nginx_tpl.conf",
         "PARAMS": ["server_name", "root", "proxy_pass"]
+    },
+    "uwsgi": {
+        "ENABLED": "/etc/uwsgi/apps-enabled",
+        "AVAILABLE": "/etc/uwsgi/apps-available",
+        "RESTART": "service uwsgi reload",
+        "TPL":"uwsgi_tpl.conf",
+        "PARAMS": ["virtualenv", "plugin", "chdir", "env", "module", "processes", "threads", "http", "uid", "gid"]
     }
 }
 
@@ -43,7 +50,10 @@ def get_content(config, name):
     with open(os.path.join(config["AVAILABLE"], name)) as item:
         return item.read()
 
-@application.route("/", defaults={"service": "nginx"})
+@application.route("/")
+def service_list():
+    return render_template("services.html", services=SERVICES.keys())
+
 @application.route("/<service>/")
 def items_list(service):
     return render_template("items_list.html", items=get_items_list(SERVICES[service]), service=service)

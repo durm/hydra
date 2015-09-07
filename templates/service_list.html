@@ -1,0 +1,14 @@
+{% extends "root.html" %}
+
+{% block body %}
+<div>
+    <h3>Сервисы</h3>
+    <ul>
+        {% for item in items %}
+            <li>
+                <a href="{{ url_for('items_list', service=item) }}">{{ item }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
