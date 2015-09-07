@@ -4,9 +4,9 @@
 <div>
     <h3>Сервисы</h3>
     <ul>
-        {% for item in items %}
+        {% for service in services %}
             <li>
-                <a href="{{ url_for('items_list', service=item) }}">{{ item }}</a>
+                <a href="{{ url_for('items_list', service=service) }}">{{ service }}</a>
             </li>
         {% endfor %}
     </ul>
