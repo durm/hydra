@@ -10,14 +10,14 @@ SERVICES = {
     "nginx": {
         "ENABLED": "/etc/nginx/sites-enabled",
         "AVAILABLE": "/etc/nginx/sites-available",
-        "RESTART": "service nginx reload",
+        "RESTART": "sleep 3 && service nginx reload &",
         "TPL":"nginx_tpl.conf",
         "PARAMS": ["server_name", "root", "proxy_pass"]
     },
     "uwsgi": {
         "ENABLED": "/etc/uwsgi/apps-enabled",
         "AVAILABLE": "/etc/uwsgi/apps-available",
-        "RESTART": "service uwsgi reload",
+        "RESTART": "sleep 3 && service uwsgi reload &",
         "TPL":"uwsgi_tpl.conf",
         "PARAMS": ["virtualenv", "plugin", "chdir", "env", "module", "processes", "threads", "http", "uid", "gid"]
     }
