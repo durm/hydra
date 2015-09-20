@@ -54,11 +54,11 @@ def get_content(config, name):
 def service_list():
     return render_template("service_list.html", services=SERVICES.keys())
 
-@application.route("/<service>/")
+@application.route("/service/<service>/")
 def items_list(service):
     return render_template("items_list.html", items=get_items_list(SERVICES[service]), service=service)
 
-@application.route("/<service>/save/", methods=["post"])
+@application.route("/service/<service>/save/", methods=["post"])
 def save_items_status(service):
     config = SERVICES[service]
     ACTIVE = request.form.getlist("item")
@@ -73,11 +73,11 @@ def save_items_status(service):
                  disable(config, item)
     return redirect(url_for("items_list", service=service))
 
-@application.route("/<service>/create/")
+@application.route("/service/<service>/create/")
 def item_create(service):
     return render_template("item_create.html", service=service, config=SERVICES[service])
 
-@application.route("/<service>/create/save/", methods=["post"])
+@application.route("/service/<service>/create/save/", methods=["post"])
 def item_create_save(service):
     
     config = SERVICES[service]
@@ -91,14 +91,14 @@ def item_create_save(service):
     return redirect(url_for("items_list", service=service))
 
 
-@application.route("/<service>/update/<item>/")
+@application.route("/service/<service>/update/<item>/")
 def item_update(service, item):
     config = SERVICES[service]
     active = is_active(config, item)
     content = get_content(config, item)
     return render_template("item_update.html", service=service, item=item, content=content)
 
-@application.route("/<service>/update/save/", methods=["post"])
+@application.route("/service/<service>/update/save/", methods=["post"])
 def item_update_save(service):
     
     config = SERVICES[service]
